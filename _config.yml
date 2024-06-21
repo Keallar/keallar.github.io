@@ -44,5 +44,7 @@ social_links:
     icon: twitter-square
   - url: https://github.com/Keallar
     icon: github-square
+#  - url: mailto:zlysanskiy@gmail.ru
+#    icon: envelope
   - url: https://www.instagram.com/lysanskiy_eugene/
-    icon: instagram-square
+    icon: instagram
