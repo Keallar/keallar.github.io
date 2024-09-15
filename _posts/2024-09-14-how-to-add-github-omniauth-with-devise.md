@@ -60,12 +60,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     def github
       @user = User.from_omniauth(request.env['omniauth.auth'])
-
       if @user
         sign_in_and_redirect(@user, event: :authentication)
         set_flash_message(:notice, :success, kind: 'Github')
       else
-        session['devise.github_data'] = request.env['omniauth.auth'].except(:extra)
         redirect_to new_user_registration_url
       end
     end
@@ -137,6 +135,38 @@ describe 'POST /competitions' do
     it_behaves_like 'with GitHub authentication'
 end
 ```
+
+## Bonus
+Если вы хотите улучшить функционал и использовать данные GitHub, даже если пользователь не был сохранён при авторизации через OmniAuth, 
+можно автоматически подставлять их при дальнейшей регистрации. Это позволит упростить процесс для пользователей.
+1. Обновите метод `github` в контроллере `Users::OmniauthCallbacksController`, чтобы сохранять данные из сессии, если пользователь не создан:
+```ruby
+# app/controllers/users/omniauth_callbacks_controller.rb
+def github
+      @user = User.from_omniauth(request.env['omniauth.auth'])
+      if @user
+        sign_in_and_redirect(@user, event: :authentication)
+        set_flash_message(:notice, :success, kind: 'Github')
+      else
+        session['devise.github_data'] = request.env['omniauth.auth'].except(:extra)
+        redirect_to new_user_registration_url
+      end
+end
+```
+2. В модели `User` переопределите метод библиотеки Devise `new_with_session`, чтобы автоматически заполнять поля регистрации из данных GitHub, 
+сохранённых в сессии:
+```ruby
+# app/models/user.rb
+def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session['devise.github_data'] && session['devise.github_data']['info']
+        user.email = data['email'] if user.email.blank?
+        user.name = data['name'] if user.name.blank?
+      end
+    end
+end
+```
+Теперь, если регистрация прервана, пользователь сможет продолжить её, а данные из GitHub будут автоматически подставлены.
 
 ## Заключение
 Добавление GitHub OmniAuth через Devise и OmniAuth — это простой и быстрый способ улучшить пользовательский опыт в вашем Rails-приложении. 
