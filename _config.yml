@@ -31,7 +31,6 @@ header_pages:
   - about.md
 
 # Build settings
-#theme: jekyll-monia
 remote_theme: Keallar/jekyll-monia
 
 plugins:
