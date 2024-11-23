@@ -44,7 +44,7 @@ GEM
       webrick (~> 1.7)
     jekyll-feed (0.17.0)
       jekyll (>= 3.7, < 5.0)
-    jekyll-monia (0.1.1)
+    jekyll-monia (0.1.2)
       jekyll (~> 4.3)
       jekyll-feed (~> 0.16)
       jekyll-paginate
@@ -113,7 +113,7 @@ DEPENDENCIES
   http_parser.rb (~> 0.6.0)
   jekyll (~> 4.3.3)
   jekyll-feed (~> 0.12)
-  jekyll-monia (~> 0.1.1)
+  jekyll-monia (~> 0.1.2)
   tzinfo (>= 1, < 3)
   tzinfo-data
   wdm (~> 0.1.1)
